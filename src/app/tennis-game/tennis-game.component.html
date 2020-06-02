@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center my-5">
+            <h1>Tennis Score</h1>
+            <p>Game between {{ player1.name }} and {{ player2.name }}</p>
+            <p>{{ playerGoingFirst.name }} is serving</p>
+
+            <div class="mt-5">
+                <div *ngFor="let game of currentGame">
+                    <p>{{ game }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
