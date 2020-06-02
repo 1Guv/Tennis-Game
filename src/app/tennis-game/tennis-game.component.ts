@@ -6,6 +6,12 @@ export class PlayerCLass {
   score: number;
 }
 
+export class GameClass {
+  score: string;
+  action: string;
+  result: string;
+}
+
 @Component({
   selector: 'app-tennis-game',
   templateUrl: './tennis-game.component.html',
@@ -29,32 +35,40 @@ export class TennisGameComponent implements OnInit {
 
   currentGame = [];
 
+  tennisGamePlay = ['0','15','30','40','won'];
+
   constructor() { }
 
   ngOnInit() {
 
     this.whoIsGoingFirst();
 
-    for (let i=0; i<10; i++) {
+    for (let i=0; i<5; i++) {
       this.whoWinsAPoint();
     }
   }
 
   whoWinsAPoint() {
     let oneOrZero = this.getRandomOneOrZero();
-    this.player1.rNumber === oneOrZero ? this.player1GetsAPoint() : this.player2GetsAPoint();
+    this.player1.rNumber === oneOrZero ? this.player1GetsAPoint(oneOrZero) : this.player2GetsAPoint(oneOrZero);
   }
 
-  player1GetsAPoint() {
-    let action = `${this.player1.name} wins a point`;
-    // console.log(action);
-    this.currentGame.push(action);
+  player1GetsAPoint(oneOrZero: number) {
+    let game = new GameClass;
+    game.score = this.getScore();
+    game.action = `${this.player1.name} wins a point`;
+    game.result = this.getResult(oneOrZero);
+    // console.log(game);
+    this.currentGame.push(game);
   }
 
-  player2GetsAPoint() {
-    let action = `${this.player2.name} wins a point`;
-    // console.log(action);
-    this.currentGame.push(action);
+  player2GetsAPoint(oneOrZero: number) {
+    let game = new GameClass;
+    game.score = this.getScore();
+    game.action = `${this.player2.name} wins a point`;
+    game.result = this.getResult(oneOrZero);
+    // console.log(game);
+    this.currentGame.push(game);
   }
 
   whoIsGoingFirst() {
@@ -65,6 +79,14 @@ export class TennisGameComponent implements OnInit {
 
   getRandomOneOrZero(): number {
     return Math.round(Math.random()*2);
+  }
+
+  getScore():string {
+    return 'score';
+  }
+
+  getResult(player: number):string {
+    return 'result';
   }
 
 }
