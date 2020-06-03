@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export class PlayerCLass {
   name: string;
   rNumber: number;
-  score: number;
+  score: string;
 }
 
 export class GameClass {
@@ -22,20 +23,18 @@ export class TennisGameComponent implements OnInit {
   player1: PlayerCLass = {
     name: 'Tim',
     rNumber: 0,
-    score:  0
+    score:  '0'
   };
 
   player2: PlayerCLass = {
     name: 'Roger',
     rNumber: 1,
-    score:  0
+    score:  '0'
   };
 
   playerGoingFirst: PlayerCLass;
 
   currentGame = [];
-
-  tennisGamePlay = ['0','15','30','40','won'];
 
   constructor() { }
 
@@ -54,8 +53,9 @@ export class TennisGameComponent implements OnInit {
   }
 
   player1GetsAPoint(oneOrZero: number) {
+    this.addPoints(this.player1);
     let game = new GameClass;
-    game.score = this.getScore();
+    game.score = `${this.player1.score}` + '-' + `${this.player2.score}`;
     game.action = `${this.player1.name} wins a point`;
     game.result = this.getResult(oneOrZero);
     // console.log(game);
@@ -63,8 +63,9 @@ export class TennisGameComponent implements OnInit {
   }
 
   player2GetsAPoint(oneOrZero: number) {
+    this.addPoints(this.player2);
     let game = new GameClass;
-    game.score = this.getScore();
+    game.score = `${this.player1.score}` + '-' + `${this.player2.score}`;
     game.action = `${this.player2.name} wins a point`;
     game.result = this.getResult(oneOrZero);
     // console.log(game);
@@ -81,12 +82,22 @@ export class TennisGameComponent implements OnInit {
     return Math.round(Math.random()*2);
   }
 
-  getScore():string {
-    return 'score';
-  }
-
   getResult(player: number):string {
     return 'result';
+  }
+
+  addPoints(player: PlayerCLass) {
+    if (player.score === '0') {
+      return player.score = '15';
+    }
+
+    if (player.score === '15') {
+      return player.score = '30'
+    }
+
+    if (player.score === '30') {
+      return player.score = '40'
+    }
   }
 
 }
