@@ -50,7 +50,7 @@ export class TennisGameComponent implements OnInit {
         this.whoWinsAPoint();
       }
     }
-    console.log('currentGame', this.currentGame);
+    // console.log('currentGame', this.currentGame);
   }
 
   whoWinsAPoint() {
@@ -121,6 +121,10 @@ export class TennisGameComponent implements OnInit {
 
   addResult(player: PlayerCLass) {
     player.result = `${this.player1.score} - ${this.player2.score}`;
+  }
+
+  startGame() {
+    window.location.reload();
   }
 
 }
