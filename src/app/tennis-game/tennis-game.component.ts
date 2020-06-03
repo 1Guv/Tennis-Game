@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
 export class PlayerCLass {
   name: string;
   rNumber: number;
-  score: string;
-}
-
-export class GameClass {
   score: string;
   action: string;
   result: string;
@@ -23,13 +18,17 @@ export class TennisGameComponent implements OnInit {
   player1: PlayerCLass = {
     name: 'Tim',
     rNumber: 0,
-    score:  '0'
+    score:  '0',
+    action: '',
+    result: ''
   };
 
   player2: PlayerCLass = {
     name: 'Roger',
     rNumber: 1,
-    score:  '0'
+    score:  '0',
+    action: '',
+    result: ''
   };
 
   playerGoingFirst: PlayerCLass;
@@ -41,35 +40,33 @@ export class TennisGameComponent implements OnInit {
   ngOnInit() {
 
     this.whoIsGoingFirst();
+    let counter: number = 100;
 
-    for (let i=0; i<5; i++) {
-      this.whoWinsAPoint();
+    for (let i=0; i<counter; i++) {
+      if (this.player1.score === 'Game Won' || this.player2.score === 'Game Won') {
+        console.log('Game Finished');
+        counter = 0;
+      } else {
+        this.whoWinsAPoint();
+      }
     }
+    console.log('currentGame', this.currentGame);
   }
 
   whoWinsAPoint() {
     let oneOrZero = this.getRandomOneOrZero();
-    this.player1.rNumber === oneOrZero ? this.player1GetsAPoint(oneOrZero) : this.player2GetsAPoint(oneOrZero);
+    this.player1.rNumber === oneOrZero ? this.playerGetsAPoint(this.player1) : this.playerGetsAPoint(this.player2);
   }
 
-  player1GetsAPoint(oneOrZero: number) {
-    this.addPoints(this.player1);
-    let game = new GameClass;
-    game.score = `${this.player1.score}` + '-' + `${this.player2.score}`;
-    game.action = `${this.player1.name} wins a point`;
-    game.result = this.getResult(oneOrZero);
-    // console.log(game);
-    this.currentGame.push(game);
-  }
-
-  player2GetsAPoint(oneOrZero: number) {
-    this.addPoints(this.player2);
-    let game = new GameClass;
-    game.score = `${this.player1.score}` + '-' + `${this.player2.score}`;
-    game.action = `${this.player2.name} wins a point`;
-    game.result = this.getResult(oneOrZero);
-    // console.log(game);
-    this.currentGame.push(game);
+  playerGetsAPoint(player: PlayerCLass) {
+    // console.log('player', player);
+    let newPlayer = {...player};
+    
+    this.addScore(newPlayer);
+    this.addAction(newPlayer);
+    this.addResult(newPlayer);
+    this.currentGame.push(newPlayer); // this goes into the array
+    player.score = newPlayer.score; // this updates the original object with the new score
   }
 
   whoIsGoingFirst() {
@@ -82,22 +79,48 @@ export class TennisGameComponent implements OnInit {
     return Math.round(Math.random()*2);
   }
 
-  getResult(player: number):string {
-    return 'result';
+  addScore(player: PlayerCLass) {
+
+    switch (player.score) {
+      case '0':
+        player.score = '15';
+        break;
+      case '15':
+        player.score = '30';
+        break
+      case '30':
+        player.score = '40';
+        break;
+      case '40':
+        if ((this.player1.score === '40' && this.player2.score !== '40') || (this.player2.score === '40' && this.player1.score !== '40')) {
+          if (((this.player1.score === '40' && this.player2.score !== 'Deuce') || (this.player2.score === '40' && this.player1.score !== 'Deuce'))) {
+            if (((this.player1.score === '40' && this.player2.score !== 'Advantage') || (this.player2.score === '40' && this.player1.score !== 'Advantage'))) {
+              player.score = 'Game Won';
+            }
+          }
+        }
+
+        if (this.player1.score === '40' && this.player2.score === '40') {
+          player.score = "Deuce";
+        }
+        break;
+      case 'Deuce':
+        player.score = 'Advantage';
+        break;
+      case 'Advantage':
+        player.score = 'Game Won';
+        break;
+      default:
+        console.log(`default`);
+    }
   }
 
-  addPoints(player: PlayerCLass) {
-    if (player.score === '0') {
-      return player.score = '15';
-    }
+  addAction(player: PlayerCLass) {
+    player.action = `${player.name} wins a point`;
+  }
 
-    if (player.score === '15') {
-      return player.score = '30'
-    }
-
-    if (player.score === '30') {
-      return player.score = '40'
-    }
+  addResult(player: PlayerCLass) {
+    player.result = `${this.player1.score} - ${this.player2.score}`;
   }
 
 }

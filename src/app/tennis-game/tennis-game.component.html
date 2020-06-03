@@ -7,9 +7,14 @@
 
             <div class="mt-5">
                 <div *ngFor="let game of currentGame">
-                    <p>{{ game.score }} | {{ game.action }} | {{ game.result }}</p>
+                    <div class="row">
+                        <div class="col-4">{{ game.score }}</div>
+                        <div class="col-4">{{ game.action }}</div>
+                        <div class="col-4">{{ game.result }}</div>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
